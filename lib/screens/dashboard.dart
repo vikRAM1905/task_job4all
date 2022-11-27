@@ -21,7 +21,7 @@ class _DashboardPageState extends State<DashboardPage> {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: PreferredSize(
-          preferredSize: const Size(double.infinity, 80),
+          preferredSize: Size(size.width, size.height * 0.10),
           child: Column(
             children: [
               const Spacer(),
@@ -79,7 +79,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             ),
                             const SizedBox(height: 20),
                             SizedBox(
-                              height: size.height * 0.25,
+                              height: size.height * 0.27,
                               width: double.infinity,
                               child: GridView.count(
                                 physics: const NeverScrollableScrollPhysics(),
@@ -121,14 +121,14 @@ class _DashboardPageState extends State<DashboardPage> {
                             ),
                             const SizedBox(height: 10),
                             SizedBox(
-                              height: 150,
+                              height: size.height * 0.18,
                               child: ListView(
                                 scrollDirection: Axis.horizontal,
                                 children: [
                                   for (int i = 0;
                                       i < controller.popularList.length;
                                       i++)
-                                    popular(controller.popularList[i])
+                                    popular(controller.popularList[i], size)
                                 ],
                               ),
                             ),
@@ -141,13 +141,15 @@ class _DashboardPageState extends State<DashboardPage> {
                                   fontSize: 22),
                             ),
                             const SizedBox(height: 10),
-                            ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemBuilder: ((context, index) {
-                                return recentJobs(controller, index);
-                              }),
-                              itemCount: controller.recentList.length,
+                            SizedBox(
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemBuilder: ((context, index) {
+                                  return recentJobs(controller, index, size);
+                                }),
+                                itemCount: controller.recentList.length,
+                              ),
                             ),
                             const SizedBox(height: 50),
                           ],
@@ -168,7 +170,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                 pageIndicator_2(size, controller)
                               ],
                             ),
-                            const SizedBox(height: 10),
+                            const SizedBox(height: 20),
                             Row(
                               children: [
                                 const Text(
@@ -180,8 +182,8 @@ class _DashboardPageState extends State<DashboardPage> {
                                 ),
                                 const Spacer(),
                                 Container(
-                                  height: 25,
-                                  width: 100,
+                                  height: size.height * 0.04,
+                                  width: size.width * 0.3,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
                                       color: Colors.blue),
@@ -194,12 +196,12 @@ class _DashboardPageState extends State<DashboardPage> {
                                 )
                               ],
                             ),
-                            const SizedBox(height: 10),
+                            const SizedBox(height: 20),
                             ListView.builder(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               itemBuilder: ((context, index) {
-                                return jobMatchWidget(controller, index);
+                                return jobMatchWidget(controller, index, size);
                               }),
                               itemCount: controller.jobsMatchList.length,
                             )
@@ -210,16 +212,22 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  Padding jobMatchWidget(DashboardController controller, int index) {
+  Padding jobMatchWidget(DashboardController controller, int index, size) {
     return Padding(
       padding: const EdgeInsets.all(5.0),
-      child: SizedBox(
-          height: 80,
-          width: double.infinity,
+      child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            color: Colors.white,
+          ),
+          height: size.height * 0.10,
+          width: size.width * 0.98,
           child: Row(
             children: [
               Image.asset(controller.jobsMatchList[index].image!,
-                  height: 70, width: 70, fit: BoxFit.fill),
+                  height: size.height * 0.08,
+                  width: size.width * 0.18,
+                  fit: BoxFit.fill),
               Padding(
                 padding: const EdgeInsets.only(left: 5.0),
                 child: Column(
@@ -227,8 +235,8 @@ class _DashboardPageState extends State<DashboardPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      height: 20,
-                      width: 300,
+                      height: size.height * 0.03,
+                      width: size.width * 0.7,
                       child: Row(
                         children: [
                           Text(controller.jobsMatchList[index].title!,
@@ -236,8 +244,8 @@ class _DashboardPageState extends State<DashboardPage> {
                                   fontWeight: FontWeight.bold, fontSize: 16)),
                           const Spacer(),
                           Container(
-                            height: 20,
-                            width: 80,
+                            height: size.height * 0.03,
+                            width: size.width * 0.22,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 color: Colors.red),
@@ -254,8 +262,8 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
                     Text(controller.jobsMatchList[index].subtitle!),
                     SizedBox(
-                      height: 20,
-                      width: 300,
+                      height: size.height * 0.03,
+                      width: size.width * 0.7,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -281,12 +289,12 @@ class _DashboardPageState extends State<DashboardPage> {
 
   Positioned pageIndicator_2(Size size, DashboardController controller) {
     return Positioned(
-      bottom: 15,
+      bottom: size.height * 0.007,
       left: size.width * 0.4,
       child: Align(
         alignment: Alignment.bottomCenter,
         child: Container(
-          width: 80,
+          width: size.width * 0.2,
           decoration: BoxDecoration(
               color: Colors.white, borderRadius: BorderRadius.circular(10)),
           child: Center(
@@ -320,7 +328,7 @@ class _DashboardPageState extends State<DashboardPage> {
               }),
           autoPlay: true,
           autoPlayInterval: const Duration(seconds: 2),
-          height: 200.0,
+          height: size.height * 0.2,
           viewportFraction: 1),
       items: controller.sliderList
           .map((item) => Center(
@@ -332,12 +340,12 @@ class _DashboardPageState extends State<DashboardPage> {
 
   Positioned pageIndicator(Size size, DashboardController controller) {
     return Positioned(
-      bottom: 15,
+      bottom: size.height * 0.007,
       left: size.width * 0.4,
       child: Align(
         alignment: Alignment.bottomCenter,
         child: Container(
-          width: 80,
+          width: size.width * 0.2,
           decoration: BoxDecoration(
               color: Colors.white, borderRadius: BorderRadius.circular(10)),
           child: Center(
@@ -371,7 +379,7 @@ class _DashboardPageState extends State<DashboardPage> {
               }),
           autoPlay: true,
           autoPlayInterval: const Duration(seconds: 2),
-          height: 200.0,
+          height: size.height * 0.2,
           viewportFraction: 1),
       items: controller.sliderList
           .map((item) => Center(
@@ -381,16 +389,22 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  Padding recentJobs(DashboardController controller, int index) {
+  Padding recentJobs(DashboardController controller, int index, size) {
     return Padding(
       padding: const EdgeInsets.all(5.0),
-      child: SizedBox(
-          height: 80,
-          width: double.infinity,
+      child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            color: Colors.white,
+          ),
+          height: size.height * 0.10,
+          width: size.width * 0.98,
           child: Row(
             children: [
               Image.asset(controller.recentList[index].image!,
-                  height: 70, width: 70, fit: BoxFit.fill),
+                  height: size.height * 0.08,
+                  width: size.width * 0.18,
+                  fit: BoxFit.fill),
               Padding(
                 padding: const EdgeInsets.only(left: 5.0),
                 child: Column(
@@ -398,8 +412,8 @@ class _DashboardPageState extends State<DashboardPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      height: 20,
-                      width: 300,
+                      height: size.height * 0.03,
+                      width: size.width * 0.7,
                       child: Row(
                         children: [
                           Text(controller.recentList[index].title!,
@@ -407,8 +421,8 @@ class _DashboardPageState extends State<DashboardPage> {
                                   fontWeight: FontWeight.bold, fontSize: 16)),
                           const Spacer(),
                           Container(
-                            height: 20,
-                            width: 80,
+                            height: size.height * 0.03,
+                            width: size.width * 0.22,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 color: Colors.blue),
@@ -424,8 +438,8 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
                     Text(controller.recentList[index].subtitle!),
                     SizedBox(
-                      height: 20,
-                      width: 300,
+                      height: size.height * 0.03,
+                      width: size.width * 0.7,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -449,30 +463,30 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  Widget popular(model) {
+  Widget popular(model, Size size) {
     return Stack(
       children: [
         Positioned(
-            top: 0,
-            right: -10,
+            top: size.height * 0.01,
+            right: 0,
             child: SizedBox(
-                height: 20,
-                width: 50,
+                height: size.height * 0.03,
+                width: size.width * 0.08,
                 child: Row(
                   children: [
-                    const Icon(Icons.star, color: Colors.orange, size: 18),
-                    Text(model.rating!),
+                    const Icon(Icons.star, color: Colors.orange, size: 16),
+                    Text(model.rating!, style: TextStyle(fontSize: 12)),
                   ],
                 ))),
         SizedBox(
-          height: 130,
-          width: 100,
+          height: size.height * 0.2,
+          width: size.height * 0.11,
           child: Column(
             children: [
               const Spacer(),
               Container(
-                height: 80,
-                width: 90,
+                height: size.height * 0.1,
+                width: size.width * 0.22,
                 decoration: BoxDecoration(
                     color: model.color, borderRadius: BorderRadius.circular(5)),
                 child: Column(
@@ -499,11 +513,11 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
         ),
         Positioned(
-          left: 15,
-          top: 10,
+          left: size.width * 0.035,
+          top: size.height * 0.03,
           child: SizedBox(
-            height: 80,
-            width: 70,
+            height: size.height * 0.1,
+            width: size.height * 0.08,
             child: Image.asset(model.image!),
           ),
         ),

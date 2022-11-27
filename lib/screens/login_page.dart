@@ -23,13 +23,13 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             children: [
               companyName(size),
-              SizedBox(height: 100),
+              SizedBox(height: size.height * 0.10),
               secondChild(size),
-              SizedBox(height: 50),
+              SizedBox(height: size.height * 0.05),
               buttonWidget(size, "Poster", () {
                 Get.to(() => DashboardPage(), arguments: 1);
               }, secondaryColor, Colors.blue),
-              SizedBox(height: 20),
+              SizedBox(height: size.height * 0.02),
               buttonWidget(size, "Bidder", () {
                 Get.to(() => DashboardPage(), arguments: 2);
               }, Color.fromARGB(255, 62, 67, 159), secondaryColor)
